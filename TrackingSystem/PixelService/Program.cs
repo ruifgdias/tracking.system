@@ -1,9 +1,23 @@
+using MassTransit;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("rabbitmq://localhost", c =>
+        {
+            c.Username("dev");
+            c.Password("dev");
+        });
+    });
+});
 
 var app = builder.Build();
 
@@ -35,6 +49,29 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
+
+app.MapGet("/tracking", (HttpContext context) =>
+{
+    // --- Collect Data
+    //1.Referrer header
+    var referrer = context.Request.Headers.Referer;
+
+    //2.User - Agent header
+    var userAgent = context.Request.Headers.Referer;
+
+    //3.Visitor IP address
+    var ipAddress = context.Connection.RemoteIpAddress;
+
+    // --- Git Response
+    // String base64 gif image
+    var base64String = "R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
+    var gifBytes = Convert.FromBase64String(base64String);
+    var memoryStream = new MemoryStream(gifBytes);
+
+    return Results.Stream(memoryStream, "image/gif", "px.gif");
+})
+    .WithName("tracking")
+    .WithOpenApi();
 
 app.Run();
 
