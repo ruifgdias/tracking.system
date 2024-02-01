@@ -1,4 +1,6 @@
 using MassTransit;
+using PixelService.Extensions;
+using Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +13,7 @@ builder.Services.AddMassTransit(x =>
 {
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("rabbitmq://localhost", c =>
+        cfg.Host("rabbitmq://localhost/", c =>
         {
             c.Username("dev");
             c.Password("dev");
@@ -30,52 +32,30 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapGet("/tracking", async (HttpContext context, IBus bus) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    var message = GetTrackingInformation(context);
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+    await SendTrackingEvent(bus, message);
 
-app.MapGet("/tracking", (HttpContext context) =>
-{
-    // --- Collect Data
-    //1.Referrer header
-    var referrer = context.Request.Headers.Referer;
-
-    //2.User - Agent header
-    var userAgent = context.Request.Headers.Referer;
-
-    //3.Visitor IP address
-    var ipAddress = context.Connection.RemoteIpAddress;
-
-    // --- Git Response
-    // String base64 gif image
-    var base64String = "R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=";
-    var gifBytes = Convert.FromBase64String(base64String);
-    var memoryStream = new MemoryStream(gifBytes);
-
-    return Results.Stream(memoryStream, "image/gif", "px.gif");
+    return ApiResults.EmptyGif();
 })
     .WithName("tracking")
     .WithOpenApi();
 
 app.Run();
 
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+static TrackingEvent GetTrackingInformation(HttpContext context)
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    var referrer = context.Request.Headers.Referer;
+    var userAgent = context.Request.Headers.UserAgent;
+    var ipAddress = context.Connection.RemoteIpAddress;
+
+    return new TrackingEvent(ipAddress?.ToString(), referrer, userAgent);
+}
+
+static async Task SendTrackingEvent(IBus bus, TrackingEvent message)
+{
+    var endpoint = await bus.GetSendEndpoint(new Uri("queue:tracking-events-v1"));
+    await endpoint.Send(message);
 }
