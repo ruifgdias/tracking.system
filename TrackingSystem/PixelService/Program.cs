@@ -1,9 +1,9 @@
+using System.Globalization;
 using MassTransit;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using PixelService.Configuration;
 using PixelService.Extensions;
-using Shared;
+using Shared.Configuration;
+using Shared.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,7 +60,7 @@ static TrackingEvent GetTrackingInformation(HttpContext context)
     var userAgent = context.Request.Headers.UserAgent;
     var ipAddress = context.Connection.RemoteIpAddress;
 
-    return new TrackingEvent(ipAddress?.ToString(), referrer, userAgent);
+    return new TrackingEvent(ipAddress?.ToString(), referrer, userAgent, DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture));
 }
 
 static async Task SendTrackingEvent(IBus bus, TrackingEvent message, string queueName)

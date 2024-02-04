@@ -10,7 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		..\docker-compose.yml = ..\docker-compose.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{282BB165-8EF5-46D7-B4DB-DC0D82EB87EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{282BB165-8EF5-46D7-B4DB-DC0D82EB87EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageService", "StorageService\StorageService.csproj", "{66639BF1-5501-4864-8ED6-E820DFACC84E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{282BB165-8EF5-46D7-B4DB-DC0D82EB87EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{282BB165-8EF5-46D7-B4DB-DC0D82EB87EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{282BB165-8EF5-46D7-B4DB-DC0D82EB87EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66639BF1-5501-4864-8ED6-E820DFACC84E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66639BF1-5501-4864-8ED6-E820DFACC84E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66639BF1-5501-4864-8ED6-E820DFACC84E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66639BF1-5501-4864-8ED6-E820DFACC84E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
