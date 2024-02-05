@@ -4,7 +4,7 @@ using StorageService.Configuration;
 
 namespace StorageService.Consumers;
 
-public class TrackingEventConsumer : IConsumer<TrackingEvent>
+public class TrackingEventConsumer : ITrackingEventConsumer
 {
     private readonly StorageServiceSettings storageServiceSettings;
 
@@ -17,7 +17,7 @@ public class TrackingEventConsumer : IConsumer<TrackingEvent>
     {
         var trackingEvent = context.Message;
         var line = $"{trackingEvent.VisitDatetime}|{trackingEvent.referrer}|{trackingEvent.UserAgent}|{trackingEvent.IpAddress}";
-        await File.WriteAllTextAsync(storageServiceSettings.FilePath, line);
+        await File.AppendAllLinesAsync(storageServiceSettings.FilePath, [line], context.CancellationToken);
 
         Console.WriteLine(line);
         Console.WriteLine($"Message Processed: {context.MessageId} ✅");

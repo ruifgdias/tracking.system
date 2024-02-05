@@ -14,12 +14,13 @@ public class BusService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        Console.WriteLine("Consumer running! 🚀");
+        Console.WriteLine("Consumer running! 🚀🟢");
         return _busControl.StartAsync(cancellationToken);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
+        Console.WriteLine("Consumer stopping! 👇🔴");
         return _busControl.StopAsync(cancellationToken);
     }
 }

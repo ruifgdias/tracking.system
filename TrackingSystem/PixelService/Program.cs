@@ -1,9 +1,7 @@
-using System.Globalization;
 using MassTransit;
-using Microsoft.Extensions.Options;
 using PixelService.Extensions;
+using PixelService.Producers.TrackingEventProducer;
 using Shared.Configuration;
-using Shared.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddOptions();
-builder.Services.Configure<RabbitMqSettings>(
-    builder.Configuration.GetSection(RabbitMqSettings.SettingName));
+builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection(RabbitMqSettings.SettingName));
+builder.Services.AddSingleton<ITrackingEventProducer, TrackingEventProducer>();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -41,11 +39,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/tracking", async (HttpContext context, IBus bus, IOptions<RabbitMqSettings> rabbitMqSettings) =>
+app.MapGet("/tracking", async (HttpContext context, ITrackingEventProducer trackingEventProducer) =>
 {
-    var message = GetTrackingInformation(context);
-
-    await SendTrackingEvent(bus, message, rabbitMqSettings.Value.QueueName);
+    await trackingEventProducer.Send(context.GetTrackingEvent());
 
     return ApiResults.EmptyGif();
 })
@@ -53,18 +49,3 @@ app.MapGet("/tracking", async (HttpContext context, IBus bus, IOptions<RabbitMqS
     .WithOpenApi();
 
 app.Run();
-
-static TrackingEvent GetTrackingInformation(HttpContext context)
-{
-    var referrer = context.Request.Headers.Referer;
-    var userAgent = context.Request.Headers.UserAgent;
-    var ipAddress = context.Connection.RemoteIpAddress;
-
-    return new TrackingEvent(ipAddress?.ToString(), referrer, userAgent, DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture));
-}
-
-static async Task SendTrackingEvent(IBus bus, TrackingEvent message, string queueName)
-{
-    var endpoint = await bus.GetSendEndpoint(new Uri($"queue:{queueName}"));
-    await endpoint.Send(message);
-}

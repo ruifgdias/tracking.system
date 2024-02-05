@@ -4,6 +4,6 @@
     {
         public static string SettingName => "StorageServiceSettings";
 
-        public string FilePath { get; set; } = null!;
+        public string FilePath { get; set; } = "/tmp/visits.log";
     }
 }

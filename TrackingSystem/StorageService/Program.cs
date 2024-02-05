@@ -23,6 +23,7 @@ namespace MassTransitExample
                     var storageServiceSettings = configuration.GetSection(StorageServiceSettings.SettingName).Get<StorageServiceSettings>();
 
                     services.AddSingleton(storageServiceSettings);
+                    services.AddSingleton<ITrackingEventConsumer,TrackingEventConsumer>();
 
                     var rabbitMqSettings = configuration.GetSection(RabbitMqSettings.SettingName).Get<RabbitMqSettings>();
 
@@ -30,7 +31,7 @@ namespace MassTransitExample
 
                     services.AddMassTransit(x =>
                     {
-                        x.AddConsumer<TrackingEventConsumer>(s =>
+                        x.AddConsumer<ITrackingEventConsumer>(s =>
                         new TrackingEventConsumer(storageServiceSettings));
 
                         x.UsingRabbitMq((context, cfg) =>
@@ -43,17 +44,13 @@ namespace MassTransitExample
 
                             cfg.ReceiveEndpoint(rabbitMqSettings.QueueName, e =>
                             {
-                                e.ConfigureConsumer<TrackingEventConsumer>(context);
+                                e.ConfigureConsumer<ITrackingEventConsumer>(context);
                             });
                         });
                     });
 
                     services.AddHostedService<BusService>();
                 })
-                //.ConfigureLogging((hostContext, logging) =>
-                //{
-                //    logging.AddConsole();
-                //})
                 .RunConsoleAsync();
         }
     }
