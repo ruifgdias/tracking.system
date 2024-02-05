@@ -39,7 +39,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/tracking", async (HttpContext context, ITrackingEventProducer trackingEventProducer) =>
+app.MapGet("/track", async (HttpContext context, ITrackingEventProducer trackingEventProducer) =>
 {
     await trackingEventProducer.Send(context.GetTrackingEvent());
 
