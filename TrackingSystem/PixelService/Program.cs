@@ -39,9 +39,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/track", async (HttpContext context, ITrackingEventProducer trackingEventProducer) =>
+app.MapGet("/track", async (HttpContext context, ITrackingEventProducer trackingEventProducer, CancellationToken cancellationToken) =>
 {
-    await trackingEventProducer.Send(context.GetTrackingEvent());
+    await trackingEventProducer.Send(context.GetTrackingEvent(), cancellationToken);
 
     return ApiResults.EmptyGif();
 })

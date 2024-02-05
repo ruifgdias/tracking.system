@@ -9,7 +9,7 @@ namespace PixelService.Extensions
         {
             var referrer = context.Request.Headers.Referer;
             var userAgent = context.Request.Headers.UserAgent;
-            var ipAddress = context.Connection.RemoteIpAddress!.MapToIPv4();
+            var ipAddress = context.Connection.RemoteIpAddress?.MapToIPv4();
 
             return new TrackingEvent(ipAddress?.ToString(), referrer, userAgent, DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture));
         }

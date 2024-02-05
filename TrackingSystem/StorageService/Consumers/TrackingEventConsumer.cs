@@ -16,7 +16,7 @@ public class TrackingEventConsumer : ITrackingEventConsumer
     public async Task Consume(ConsumeContext<TrackingEvent> context)
     {
         var trackingEvent = context.Message;
-        var line = $"{trackingEvent.VisitDatetime}|{trackingEvent.referrer}|{trackingEvent.UserAgent}|{trackingEvent.IpAddress}";
+        var line = $"{trackingEvent.VisitDatetime}|{trackingEvent.Referrer}|{trackingEvent.UserAgent}|{trackingEvent.IpAddress}";
         await File.AppendAllLinesAsync(storageServiceSettings.FilePath, [line], context.CancellationToken);
 
         Console.WriteLine($"Message Processed: {context.MessageId} ✅");

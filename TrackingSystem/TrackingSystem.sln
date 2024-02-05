@@ -7,13 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PixelService", "PixelServic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{84623881-41FB-4528-8DE2-5C673CE7CAF1}"
 	ProjectSection(SolutionItems) = preProject
+		..\.dockerignore = ..\.dockerignore
 		..\docker-compose.yml = ..\docker-compose.yml
 		..\Deploy\Docker\PixelService\Dockerfile = ..\Deploy\Docker\PixelService\Dockerfile
+		..\Deploy\Docker\StorageService\Dockerfile = ..\Deploy\Docker\StorageService\Dockerfile
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{282BB165-8EF5-46D7-B4DB-DC0D82EB87EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageService", "StorageService\StorageService.csproj", "{66639BF1-5501-4864-8ED6-E820DFACC84E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageService", "StorageService\StorageService.csproj", "{66639BF1-5501-4864-8ED6-E820DFACC84E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelService.Tests", "PixelService.Tests\PixelService.Tests.csproj", "{31A97B76-0E76-4E9B-8624-31B482B25944}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,10 @@ Global
 		{66639BF1-5501-4864-8ED6-E820DFACC84E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66639BF1-5501-4864-8ED6-E820DFACC84E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66639BF1-5501-4864-8ED6-E820DFACC84E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31A97B76-0E76-4E9B-8624-31B482B25944}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31A97B76-0E76-4E9B-8624-31B482B25944}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31A97B76-0E76-4E9B-8624-31B482B25944}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31A97B76-0E76-4E9B-8624-31B482B25944}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
