@@ -19,7 +19,6 @@ public class TrackingEventConsumer : ITrackingEventConsumer
         var line = $"{trackingEvent.VisitDatetime}|{trackingEvent.referrer}|{trackingEvent.UserAgent}|{trackingEvent.IpAddress}";
         await File.AppendAllLinesAsync(storageServiceSettings.FilePath, [line], context.CancellationToken);
 
-        Console.WriteLine(line);
         Console.WriteLine($"Message Processed: {context.MessageId} ✅");
     }
 }
