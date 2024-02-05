@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{84623881-41FB-4528-8DE2-5C673CE7CAF1}"
 	ProjectSection(SolutionItems) = preProject
 		..\docker-compose.yml = ..\docker-compose.yml
+		..\Deploy\Docker\PixelService\Dockerfile = ..\Deploy\Docker\PixelService\Dockerfile
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{282BB165-8EF5-46D7-B4DB-DC0D82EB87EC}"
