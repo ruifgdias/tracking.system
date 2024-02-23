@@ -22,6 +22,8 @@ namespace MassTransitExample
 
                     var storageServiceSettings = configuration.GetSection(StorageServiceSettings.SettingName).Get<StorageServiceSettings>();
 
+                    ArgumentNullException.ThrowIfNull(nameof(storageServiceSettings));
+
                     services.AddSingleton(storageServiceSettings);
                     services.AddSingleton<ITrackingEventConsumer,TrackingEventConsumer>();
 
